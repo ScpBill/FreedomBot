@@ -34,5 +34,5 @@ class Welcome(Cog):
             )
 
 
-def setup(bot: Bot) -> None:
-    bot.add_cog(Welcome(bot))
+async def setup(bot: Bot) -> None:
+    await bot.add_cog(Welcome(bot))
