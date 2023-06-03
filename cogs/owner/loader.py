@@ -26,7 +26,7 @@ class Loader(Cog, name='Loader', description='Managing extensions and loading co
         ['cogs.admin.loader', ...]
         """
         if cog_name is not None:
-            return [f'bot.cogs.{cog_name}']
+            return [f'cogs.{cog_name}']
 
         extensions = []
         for _dir_name in os.listdir('./cogs'):
