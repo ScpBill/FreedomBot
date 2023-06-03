@@ -17,7 +17,7 @@ class RinderpestBot(commands.Bot):
 
     async def setup_hook(self):
         for cog in Config.STANDARD_EXTENSIONS:
-            path = f'bot.cogs.{cog}'
+            path = f'cogs.{cog}'
             try:
                 await self.load_extension(path)
             except Exception as exc:
