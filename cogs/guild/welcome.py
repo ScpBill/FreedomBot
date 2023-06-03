@@ -32,3 +32,7 @@ class Welcome(Cog):
                 content=f'**Здравствуй {member.mention}!**',
                 embed=message
             )
+
+
+def setup(bot: Bot) -> None:
+    bot.add_cog(Welcome(bot))
