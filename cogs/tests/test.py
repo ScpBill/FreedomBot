@@ -8,7 +8,7 @@ from spec.config import Config
 import os
 
 
-class Welcome(Cog):
+class Test(Cog):
 
     def __init__(self, bot: Bot):
         self.bot = bot
@@ -44,4 +44,4 @@ class Welcome(Cog):
 
 
 async def setup(bot: Bot) -> None:
-    await bot.add_cog(Welcome(bot))
+    await bot.add_cog(Test(bot))
