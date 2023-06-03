@@ -25,8 +25,7 @@ class Welcome(Cog):
                 timestamp=member.joined_at,
                 colour=member.accent_colour if member.accent_colour else Colour(0x2d4db4)
             )
-            message.set_author(
-                name=f'{member.name}#{member.discriminator}' + (f' ({member.display_name})' if member.name != member.display_name else ''))
+            message.set_author(name=f'{member.name}#{member.discriminator}')
             message.set_footer(text=f'User ID: {member.id}', icon_url=member.guild.icon)
             message.set_thumbnail(url=getattr(member.avatar, 'url', None))
 
