@@ -14,7 +14,7 @@ class Welcome(Cog):
         self.bot = bot
     
     @Cog.listener()
-    async def on_member_join(member: Member) -> None:
+    async def on_member_join(self, member: Member) -> None:
         if member.guild.id == 948239228989493338:
             message = Embed(
                 title='Добро пожаловать на «Freedom»!',
