@@ -27,7 +27,7 @@ class Analytics(Cog):
             '\n'.join(guilds)
         )
         
-        await ctx.reply(embed, ephemeral=True)
+        await ctx.reply(embed=embed, ephemeral=True)
 
 
 async def setup(bot: Bot) -> None:
