@@ -20,6 +20,7 @@ class RinderpestBot(commands.Bot):
     async def setup_hook(self):
         for path in os.listdir('./cogs'):
             for file in os.listdir(os.path.join('./cogs', path)):
+                file = os.path.splitext(file)[0]
                 full_cog = 'cogs.' + (cog := f'{path}.{file}')
                 try:
                     await self.load_extension(full_cog)
