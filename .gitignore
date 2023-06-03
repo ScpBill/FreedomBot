@@ -1,0 +1,8 @@
+/venv/
+/.idea/
+/.local/
+/.cache/
+__pycache__/
+.env
+.gitconfig
+*.pyc
