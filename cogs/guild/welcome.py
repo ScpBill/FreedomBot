@@ -1,7 +1,7 @@
 from discord.ext.commands import Cog, Bot, Context
 from discord.app_commands import Choice
 from discord.ext import commands
-from discord import app_commands, Member, Embed
+from discord import app_commands, Member, Embed, Colour
 
 from spec.config import Config
 
@@ -23,9 +23,9 @@ class Welcome(Cog):
                     '\n- Ознакомиться с проектом можно в <#1113060299826802800>.'
                     '\n- Не забудьте прочитать наши правила: <#1113060541771038800>.',
                 timestamp=member.joined_at,
-                colour=member.colour
+                colour=member.accent_colour if member.accent_colour else Colour(0x2d4db4)
             )
-            message.set_author(name=f'{member.name}#{member.discriminator}' + (f' {member.nick}' if member.nick else ''))
+            message.set_author(name=f'{member.name}#{member.discriminator} ({member.display_name})')
             message.set_footer(text=f'User ID: {member.id}', icon_url=member.guild.icon)
             message.set_thumbnail(url=getattr(member.avatar, 'url', None))
 
