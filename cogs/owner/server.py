@@ -172,7 +172,7 @@ class ServerManagement(Cog, name='Server Management', description='Managing the 
                 content=answer.content + '\n> `❌` The git *reset* command was executed with the code `{}`'
                                          ''.format(console.result_code))
 
-        console = Console(args='git pull origin master')
+        console = Console(args='git pull origin main')
         await console.send_execution()
         if not console.result_code:
             answer: Message = await answer.edit(
