@@ -17,14 +17,14 @@ class Analytics(Cog):
     async def list_guilds(self, ctx: Context) -> None:
         await ctx.defer()
         guilds = []
-        
+
         for guild in self.bot.guilds:
             invite = await guild.text_channels[0].create_invite(max_uses=1, temporary=True, max_age=600)
             guilds.append(f'- [{guild.name}]({invite})')
         embed = Embed(
             title='List of guilds with me',
             description='All invitation links are valid for 10 minutes and once.\n' +
-            '\n'.join(guild)
+            '\n'.join(guilds)
         )
         
         await ctx.reply(embed, ephemeral=True)
