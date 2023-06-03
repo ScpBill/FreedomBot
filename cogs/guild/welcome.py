@@ -34,6 +34,8 @@ class Welcome(Cog):
                 embed=message
             )
 
+            await member.add_roles(member.guild.get_role(985989156310224986))
+
 
 async def setup(bot: Bot) -> None:
     await bot.add_cog(Welcome(bot))
