@@ -19,10 +19,10 @@ class RinderpestBot(commands.Bot):
 
     async def setup_hook(self):
         for path in os.listdir('./cogs'):
-            for cog in os.listdir(os.path.join('./cogs', path)):
-                path = f'cogs.{cog}'
+            for file in os.listdir(os.path.join('./cogs', path)):
+                full_cog = 'cogs.' + (cog := f'{path}.{file}')
                 try:
-                    await self.load_extension(path)
+                    await self.load_extension(full_cog)
                 except Exception as exc:
                     print(f'[-] Could not load extension {cog} due to {exc.__class__.__name__}: {exc}')
                 else:
