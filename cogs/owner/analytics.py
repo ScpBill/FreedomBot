@@ -14,6 +14,7 @@ class Analytics(Cog):
         self.bot = bot
 
     @commands.hybrid_command()
+    @commands.is_owner()
     async def list_guilds(self, ctx: Context) -> None:
         await ctx.defer(ephemeral=True)
         guilds = []
