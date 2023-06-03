@@ -8,5 +8,5 @@ def main():
 
 if __name__ == '__main__':
     os.system('git reset --hard')
-    os.system('git pull origin master')
+    os.system('git pull origin main')
     main()
