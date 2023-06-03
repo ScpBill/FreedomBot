@@ -182,7 +182,7 @@ class ServerManagement(Cog, name='Server Management', description='Managing the 
                 content=answer.content + '\n> `❌` The git *pull* command was executed with the code `{}`'
                                          ''.format(console.result_code))
 
-        await answer.edit(content='**The update was successful**')
+        await answer.edit(content=answer.content + '\n**The update was successful**')
 
     @commands.hybrid_command(
         name='console', aliases=['cmd', 'shell'], description='Shell Command Management',
