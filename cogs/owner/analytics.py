@@ -15,9 +15,11 @@ class Analytics(Cog):
 
     @commands.hybrid_command()
     async def list_guilds(self, ctx: Context) -> None:
+        await ctx.defer()
         guilds = []
+        
         for guild in self.bot.guilds:
-            invite = await guild.channels[0].create_invite(max_uses=1, temporary=True, max_age=600)
+            invite = await guild.text_channels[0].create_invite(max_uses=1, temporary=True, max_age=600)
             guilds.append(f'- [{guild.name}]({invite})')
         embed = Embed(
             title='List of guilds with me',
