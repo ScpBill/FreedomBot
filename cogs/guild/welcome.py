@@ -23,10 +23,11 @@ class Welcome(Cog):
                     '\n- Ознакомиться с проектом можно в <#1113060299826802800>.'
                     '\n- Не забудьте прочитать наши правила: <#1113060541771038800>.',
                 timestamp=member.joined_at,
-                colour=member.accent_colour
+                colour=member.colour
             )
-            message.set_author(name=member.name)
+            message.set_author(name=f'{member.name}#{member.discriminator}' + (f' {member.nick}' if member.nick else ''))
             message.set_footer(text=f'User ID: {member.id}', icon_url=member.guild.icon)
+            message.set_thumbnail(url=getattr(member.avatar, 'url', None))
 
             await member.guild.get_channel(1113059101539315722).send(
                 content=f'**Здравствуй {member.mention}!**',
