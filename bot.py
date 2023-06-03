@@ -4,6 +4,8 @@ from discord.ext import commands
 from spec.env import Env
 from spec.config import Config
 
+import os
+
 
 def start_bot():
     bot = RinderpestBot(Intents.all())
@@ -16,14 +18,15 @@ class RinderpestBot(commands.Bot):
                          case_insensitive=True, strip_after_prefix=True, **kwargs)
 
     async def setup_hook(self):
-        for cog in Config.STANDARD_EXTENSIONS:
-            path = f'cogs.{cog}'
-            try:
-                await self.load_extension(path)
-            except Exception as exc:
-                print(f'[-] Could not load extension {cog} due to {exc.__class__.__name__}: {exc}')
-            else:
-                print(f'[+] The {cog} extension has been successfully installed')
+        for path in os.listdir('./cogs'):
+            for cog in os.listdir(os.path.join('./cogs', path)):
+                path = f'cogs.{cog}'
+                try:
+                    await self.load_extension(path)
+                except Exception as exc:
+                    print(f'[-] Could not load extension {cog} due to {exc.__class__.__name__}: {exc}')
+                else:
+                    print(f'[+] The {cog} extension has been successfully installed')
 
     async def on_ready(self):
         print(f'[**] Logged on as "{self.user}" (ID: {self.user.id})')
