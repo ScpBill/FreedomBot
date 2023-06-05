@@ -5,11 +5,15 @@ from discord import app_commands
 
 import re
 import datetime
+import typing
 
 
-class TimePeriodConverter(FlagConverter):
-
-    async def convert(self, ctx: Context, *, argument: str) -> datetime.datetime:
+class ClearConverter(FlagConverter):
+    count: int = None
+    time: str = None
+    members: typing.List[Member] = None
+    
+    async def convert(self, ctx: Context, *, argument: str):
         timedelta = datetime.timedelta()
         # [1, w, 2, d, 3, h, 4, m, 5, s]
         parts: list[str] = re.findall(r'\D+|\d+', argument.replace(' ', ''))
@@ -28,9 +32,9 @@ class TimePeriodConverter(FlagConverter):
                 timedelta += datetime.timedelta(seconds=num)
             else:
                 raise BadArgument()
-        return ctx.message.created_at - timedelta
-
-
+        self.time = ctx.message.created_at - timedelta
+        return self
+    
 class Clear(Cog):
 
     def __init__(self, bot: Bot):
@@ -40,16 +44,16 @@ class Clear(Cog):
     @app_commands.describe(
         count='Число сообщений, нуждающихся в очистке')
     @commands.has_permissions(manage_messages=True)
-    async def clear(self, ctx: Context, count: int = None, *, members: commands.Greedy[Member] = None, time: TimePeriodConverter = None):
-        answer = await ctx.reply(f'In the process of cleaning...\n{count}\n{time}\n{members}', allowed_mentions=False)
+    async def clear(self, ctx: Context, * , args: ClearConverter):
+        answer = await ctx.reply(f'In the process of cleaning...\n{args.count}\n{args.time}\n{args.members}', allowed_mentions=False)
 
         def check_on_author(message: Message) -> bool:
-            return message.author in members
+            return message.author in args.members
 
         await ctx.channel.purge(
-            limit=count,
+            limit=args.count,
             check=check_on_author,
-            after=time,
+            after=args.time,
             before=ctx.message.created_at,
             reason='the command to clear the chat'
         )
