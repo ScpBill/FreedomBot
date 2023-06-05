@@ -38,11 +38,10 @@ class Clear(Cog):
     
     @commands.hybrid_command(name='clear', aliases=['очистить', 'purge'], description='Очищает сообщения в данном канале')
     @app_commands.describe(
-        count='Число сообщений, нуждающихся в очистке',
-        members='Пользователи, чьи сообщения будут очищены')
+        count='Число сообщений, нуждающихся в очистке')
     @commands.has_permissions(manage_messages=True)
-    async def clear(self, ctx: Context, count: int = None, *, time: TimePeriodConverter = None, members: commands.Greedy[Member]):
-        answer = await ctx.reply('<a:Loading:749672972079333497> In the process of cleaning...', allowed_mentions=False)
+    async def clear(self, ctx: Context, count: int = None, *, members: commands.Greedy[Member] = None, time: TimePeriodConverter = None):
+        answer = await ctx.reply(f'In the process of cleaning...\n{count}\n{time}\n{members}', allowed_mentions=False)
 
         def check_on_author(message: Message) -> bool:
             return message.author in members
