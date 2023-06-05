@@ -69,7 +69,7 @@ class Clear(Cog):
         count='Число сообщений, нуждающихся в очистке')
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx: Context, * , args: ClearConverter):
-        answer = await ctx.reply(f'In the process of cleaning...\n{args.count}\n{args.time}\n{args.members}', allowed_mentions=False)
+        answer = await ctx.reply(f'⏱️ In the process of cleaning...', allowed_mentions=False)
 
         def check_on_author(message: Message) -> bool:
             return message.author in args.members if args.members else True
@@ -82,7 +82,7 @@ class Clear(Cog):
             reason='the command to clear the chat'
         )
 
-        await answer.edit(content='✅ Cleaning was successful', delete_after=5.0)
+        await answer.edit(content='✅ Cleaning was successful!', delete_after=5.0)
 
 
 async def setup(bot: Bot) -> None:
