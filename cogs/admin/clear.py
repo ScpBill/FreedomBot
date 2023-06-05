@@ -18,15 +18,15 @@ class TimePeriodConverter(Converter):
             if not num.isdigit() or form.isdigit():
                 raise BadArgument()
             if form in ('w', 'weak', 'weaks', 'н', 'неделя', 'недели', 'недель'):
-                timedelta += datetime.timedelta(days=7*num)
+                timedelta += datetime.timedelta(days=7*int(num))
             elif form in ('d', 'day', 'days', 'д', 'день', 'дня', 'дней', 'сутки', 'суток'):
-                timedelta += datetime.timedelta(days=num)
+                timedelta += datetime.timedelta(days=int(num))
             elif form in ('h', 'hour', 'hours', 'ч', 'час', 'часа', 'часов'):
-                timedelta += datetime.timedelta(hours=num)
+                timedelta += datetime.timedelta(hours=int(num))
             elif form in ('m', 'minute', 'minutes', 'м', 'минута', 'минуты', 'минут'):
-                timedelta += datetime.timedelta(minutes=num)
+                timedelta += datetime.timedelta(minutes=int(num))
             elif form in ('s', 'second', 'seconds', 'с', 'секунда', 'секунды', 'секунд'):
-                timedelta += datetime.timedelta(seconds=num)
+                timedelta += datetime.timedelta(seconds=int(num))
             else:
                 raise BadArgument()
         return ctx.message.created_at - timedelta
