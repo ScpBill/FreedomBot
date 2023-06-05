@@ -62,7 +62,7 @@ class Clear(Cog):
         await ctx.channel.purge(
             limit=count,
             check=check_on_author,
-            after=time or None,
+            after=time if isinstance(time, datetime.datetime) else None,
             before=ctx.message.created_at,
             reason='the command to clear the chat'
         )
