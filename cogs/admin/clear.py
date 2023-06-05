@@ -75,7 +75,7 @@ class Clear(Cog):
         await answer.edit(content='✅ Cleaning was successful!', delete_after=5.0)
     
     @clear.error
-    async def clear_error(ctx: Context, error):
+    async def clear_error(self, ctx: Context, error):
         if isinstance(error, AssertionError) or isinstance(error, MissingRequiredArgument) or isinstance(error, BadArgument):
             await ctx.send_help(entity='clear')
 
