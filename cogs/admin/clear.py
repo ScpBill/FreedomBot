@@ -5,7 +5,6 @@ from discord import app_commands
 
 import re
 import datetime
-import typing
 
 
 class TimePeriodConverter(Converter):
@@ -63,14 +62,16 @@ class Clear(Cog):
 
     def __init__(self, bot: Bot):
         self.bot = bot
-    
-    @commands.hybrid_command(name='clear', aliases=['очистить', 'purge'], description='Очищает сообщения в данном канале')
+
+    @commands.hybrid_command(name='clear', aliases=['очистить', 'purge'], description='Очищает сообщения в данном канале',
+                             usage='clear <count|time>|<count&time> *[members]')
     @app_commands.describe(
         count='Число сообщений, нуждающихся в очистке',
         time='Период времени, за который были созданы сообщения',
         members='Пользователи, чьи сообщения будут очищены')
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx: Context, * , args: ClearConverter):
+        assert args.count is None and args.time is None
         answer = await ctx.reply(f'⏱️ In the process of cleaning...', allowed_mentions=False)
 
         def check_on_author(message: Message) -> bool:
