@@ -57,7 +57,8 @@ class Clear(Cog):
 
         time = None if isinstance(time, commands.Flag) else time
         members = [] if isinstance(members, commands.Flag) else members
-        assert count is not None or time is not None
+        if count is None and time is None:
+            return await ctx.send_help('clear')
 
         answer = await ctx.reply(f'⏱️ In the process of cleaning...', allowed_mentions=False)
 
