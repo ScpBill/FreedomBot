@@ -42,7 +42,7 @@ class Clear(Cog):
         after='Период времени, за который были созданы сообщения',
         members='Пользователи, чьи сообщения будут очищены')
     @commands.has_permissions(manage_messages=True)
-    async def clear(self, ctx: Context, count: int = None, after: TimePeriodConverter = None, *members: Member):
+    async def clear(self, ctx: Context, count: int = None, after: TimePeriodConverter = None, *, members: Member):
         answer = await ctx.reply('<a:Loading:749672972079333497> In the process of cleaning...', allowed_mentions=False)
 
         def check_on_author(message: Message) -> bool:
