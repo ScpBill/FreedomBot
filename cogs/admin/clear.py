@@ -67,7 +67,7 @@ class Clear(Cog):
     @commands.hybrid_command(name='clear', aliases=['очистить', 'purge'], description='Очищает сообщения в данном канале')
     @app_commands.describe(
         count='Число сообщений, нуждающихся в очистке',
-        after='Период времени, за который были созданы сообщения',
+        time='Период времени, за который были созданы сообщения',
         members='Пользователи, чьи сообщения будут очищены')
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx: Context, * , args: ClearConverter):
