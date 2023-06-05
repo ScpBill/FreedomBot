@@ -9,7 +9,7 @@ import datetime
 
 class TimePeriodConverter(FlagConverter):
 
-    async def convert(self, ctx: Context, *argument: str) -> datetime.datetime:
+    async def convert(self, ctx: Context, *, argument: str) -> datetime.datetime:
         timedelta = datetime.timedelta()
         # [1, w, 2, d, 3, h, 4, m, 5, s]
         parts: list[str] = re.findall(r'\D+|\d+', argument.replace(' ', ''))
@@ -42,7 +42,7 @@ class Clear(Cog):
         time='Период времени, за который были созданы сообщения',
         members='Пользователи, чьи сообщения будут очищены')
     @commands.has_permissions(manage_messages=True)
-    async def clear(self, ctx: Context, count: int = None, time: TimePeriodConverter = None, *, members: commands.Greedy[Member]):
+    async def clear(self, ctx: Context, count: int = None, *, time: TimePeriodConverter = None, members: commands.Greedy[Member]):
         answer = await ctx.reply('<a:Loading:749672972079333497> In the process of cleaning...', allowed_mentions=False)
 
         def check_on_author(message: Message) -> bool:
