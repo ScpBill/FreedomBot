@@ -48,17 +48,21 @@ class Clear(Cog):
         time='Период времени, за который были созданы сообщения',
         members='Пользователи, чьи сообщения будут очищены')
     @commands.has_permissions(manage_messages=True)
-    async def clear(self, ctx: Context, * , args: ClearConverter):
-        assert args.count is None and args.time is None
+    async def clear(self,
+                    ctx: Context, *,
+                    count: int = None,
+                    time: TimePeriodConverter = commands.flag(name='time', default=None),
+                    members: commands.Greedy[Member] = commands.flag(name='member', default=[])):
+        assert count is None and time is None
         answer = await ctx.reply(f'⏱️ In the process of cleaning...', allowed_mentions=False)
 
         def check_on_author(message: Message) -> bool:
-            return message.author in args.members if args.members else True
+            return message.author in members if members else True
 
         await ctx.channel.purge(
-            limit=args.count,
+            limit=count,
             check=check_on_author,
-            after=args.time,
+            after=time,
             before=ctx.message.created_at,
             reason='the command to clear the chat'
         )
