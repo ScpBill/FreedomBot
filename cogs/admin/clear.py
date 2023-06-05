@@ -11,7 +11,7 @@ import typing
 class ClearConverter(FlagConverter):
     count: int = None
     time: str = None
-    members: commands.Greedy[Member] = commands.flag(name='member', default=lambda ctx: [])
+    members: commands.Greedy[Member] = commands.flag(name='member', default=[])
     
     async def convert(self, ctx: Context, *, argument: str):
         timedelta = datetime.timedelta()
