@@ -46,7 +46,7 @@ class Clear(Cog):
                 else:
                     return await ctx.send_help('clear')
             time = ctx.message.created_at - timedelta
-        
+
         if count is None and time is None:
             return await ctx.send_help('clear')
 
