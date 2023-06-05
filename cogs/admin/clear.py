@@ -49,8 +49,8 @@ class Clear(Cog):
         members='Пользователи, чьи сообщения будут очищены')
     @commands.has_permissions(manage_messages=True)
     async def clear(self,
-                    ctx: Context, *,
-                    count: int = None,
+                    ctx: Context,
+                    count: int = None, *,
                     time: TimePeriodConverter = commands.flag(name='time', default=None),
                     members: commands.Greedy[Member] = commands.flag(name='member', default=[])):
         await ctx.defer()
@@ -76,7 +76,7 @@ class Clear(Cog):
     
     @clear.error
     async def clear_error(ctx: Context, error):
-        if isinstance(error, AssertionError) or isinstance(error, MissingRequiredArgument):
+        if isinstance(error, AssertionError) or isinstance(error, MissingRequiredArgument) or isinstance(error, BadArgument):
             await ctx.send_help(entity='clear')
 
 
