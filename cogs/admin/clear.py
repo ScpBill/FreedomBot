@@ -53,7 +53,7 @@ class Clear(Cog):
                     count: int = None,
                     time: TimePeriodConverter = commands.flag(name='time', default=None),
                     members: commands.Greedy[Member] = commands.flag(name='member', default=[])):
-        assert count is None or time is None
+        assert count is not None or time is not None
         answer = await ctx.reply(f'⏱️ In the process of cleaning...', allowed_mentions=False)
 
         def check_on_author(message: Message) -> bool:
