@@ -10,7 +10,7 @@ import typing
 
 class TimePeriodConverter(Converter):
 
-    async def convert(self, ctx: Context, *, argument: str) -> datetime.datetime:
+    async def convert(ctx: Context, *, argument: str) -> datetime.datetime:
         timedelta = datetime.timedelta()
         # [1, w, 2, d, 3, h, 4, m, 5, s]
         parts: list[str] = re.findall(r'\D+|\d+', argument.replace(' ', ''))
