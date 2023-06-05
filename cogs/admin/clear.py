@@ -67,7 +67,8 @@ class Clear(Cog):
     
     @clear.error
     async def clear_error(ctx: Context, error):
-        if isinstance(error, AssertionError) or isinstance(error, MissingRequiredArgument) or isinstance(error, )
+        if isinstance(error, AssertionError) or isinstance(error, MissingRequiredArgument):
+            pass
 
 
 async def setup(bot: Bot) -> None:
