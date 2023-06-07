@@ -31,8 +31,7 @@ STYLES = [
     app_commands.Choice(name='𝖲𝖺𝗇𝗌-𝗌𝖾𝗋𝗂𝖿', value='sans-serif'),
     app_commands.Choice(name='𝗦𝗮𝗻𝘀-𝗦𝗲𝗿𝗶𝗳 𝗕𝗼𝗹𝗱', value='sans-serif bold'),
     app_commands.Choice(name='𝘚𝘢𝘯𝘴-𝘚𝘦𝘳𝘪𝘧 𝘐𝘵𝘢𝘭𝘪𝘤', value='sans-serif italic'),
-    app_commands.Choice(name='𝙎𝙖𝙣𝙨-𝙎𝙚𝙧𝙞𝙛 𝘽𝙤𝙡𝙙 𝙄𝙩𝙖𝙡𝙞𝙘',
-                        value='sans-serif bold italic'),
+    app_commands.Choice(name='𝙎𝙖𝙣𝙨-𝙎𝙚𝙧𝙞𝙛 𝘽𝙤𝙡𝙙 𝙄𝙩𝙖𝙡𝙞𝙘', value='sans-serif bold italic'),
     app_commands.Choice(name='𝙼𝚘𝚗𝚘𝚜𝚙𝚊𝚌𝚎', value='monospace')
 ]
 
@@ -42,25 +41,31 @@ async def font_style_autocomplete(ctx, current: str):
 
 
 # todo: FontCog
-class FontCog(Cog, name='Features'):
+class Font(Cog):
 
     def __init__(self, bot: Bot):
         self.bot = bot
+    
+    @staticmethod
+    async def font_style_autocomplete(ctx, current: str):
+        return [style for style in STYLES if current.lower() in style.value]
 
-    @commands.hybrid_command()
-    @app_commands.describe(style='Style font of your text, long name is separated with `-`', text='Your text')
+    @commands.hybrid_command(description='The font generator: write and copy!')
+    @app_commands.describe(
+        style='Style font of your text, long name is separated with `-`',
+        text='Your text')
     @app_commands.autocomplete(style=font_style_autocomplete)
-    async def font(self, ctx: Context, style: str, *, text: str):
-        """The font generator: write and copy!"""
+    async def font(
+            self, ctx: Context,
+            style: str = commands.parameter(description='Style font of your text, long name is separated with `-`'), *,
+            text: str = commands.parameter(description='Your text')) -> None:
 
-        # Wait message
         await ctx.defer()
         if (style := style.lower().replace(' ', '-')) not in FONTS.keys():
             return await ctx.reply(
                 '**The font is specified incorrectly.**\n*Available fonts*: %s'
                 % ' '.join([f'`{name}`' for name in FONTS.keys()]))
 
-        # Replace symbols
         alphabet, decorated = FONTS['regular'], FONTS[style]
         try:
             await ctx.reply(''.join([decorated[alphabet.index(char)] if
@@ -76,4 +81,4 @@ class FontCog(Cog, name='Features'):
 
 
 async def setup(bot: Bot) -> None:
-    await bot.add_cog(FontCog(bot))
+    await bot.add_cog(Font(bot))

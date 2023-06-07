@@ -35,15 +35,16 @@ class CustomEmojiConverter(Converter):
 
 
 # todo: send_reaction()
-class EmojiCogs(Cog, name='Manager for emojis'):
+class Emoji(Cog):
 
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    @commands.hybrid_command(name='emoji', aliases=['emote'], description='Get info about used emojis',
-                             help='Get info', usage='emoji <:emoji:|emoji_name|emoji_id>')
-    @app_commands.describe(emoji=':emoji: or emoji_name or emoji_ID or emoji_url')
-    async def emoji(self, ctx: Context, emoji: CustomEmojiConverter) -> None:
+    @commands.hybrid_group(aliases=('emote', 'reaction'), description='Get info about used emojis')
+    @app_commands.describe(emoji=':emoji: or emoji_name or EMOJI_ID or https://emoji_url')
+    async def emoji(
+            self, ctx: Context,
+            emoji: CustomEmojiConverter = commands.parameter(description=':emoji: or emoji_name or emoji_ID or emoji_url')) -> None:
         await ctx.defer()
 
         if emoji is None:
@@ -68,61 +69,58 @@ class EmojiCogs(Cog, name='Manager for emojis'):
                             f'\nName: {"`%s`" % emoji.name}')
             await ctx.reply(embed=embed, mention_author=False)
 
-    @commands.hybrid_command(aliases=('reaction', 'send_emoji', 'rs'))
-    async def send_reaction(self, ctx: Context,
-                            emoji: str = commands.parameter(
-                                description='Emoji'),
-                            id_message: str = commands.parameter(description='ID message', default=None)):
-        """Puts a reaction to the specified message so that after, the author clicks on it"""
-        get_emoji = getattr(self.bot.get_cog('ManageChat'), 'get_emoji')
+    @emoji.command(description='Puts a reaction to the specified message so that after, the author clicks on it')
+    @app_commands.describe(
+        emoji=':emoji: or emoji_name or EMOJI_ID or https://emoji_url',
+        message_id='ID of the message to which you need to put a reaction')
+    async def send(
+            self, ctx: Context,
+            emoji: CustomEmojiConverter = commands.parameter(description=':emoji: or emoji_name or EMOJI_ID or https://emoji_url'),
+            message_id: str = commands.parameter(description='ID of the message to which you need to put a reaction', default=None)):
 
-        def check(this_reaction: Reaction, this_user: Member):
-            return this_reaction.message == current_message and this_reaction.emoji == emoji and this_user == ctx.author
+        def check(reaction: Reaction, user: Member):
+            return reaction.message == message and reaction.emoji == emoji and user == ctx.author
 
-        # Waiting message
-        await ctx.defer(ephemeral=True)
         if not ctx.interaction:
             await ctx.message.delete()
+        else:
+            await ctx.defer(ephemeral=True)
 
-        # Getting emoji
-        emoji = await get_emoji(self.bot, emoji)
         if emoji is None:
-            await ctx.send(r'Sorry, could not find the specified emoji. ¯\_(ツ)_/¯', ephemeral=True)
-            return
+            return await ctx.send(r'Sorry, could not find the specified emoji. ¯\_(ツ)_/¯', delete_after=10.0)
+        if message_id and not message_id.isdigit():
+            return await ctx.send_help('emoji send')
 
-        # Get a current message id
-        if id_message is None and ctx.message.reference:
-            id_message = ctx.message.reference.message_id
-
-        # And get a current message
+        message_id = message_id or getattr(ctx.message.reference, 'message_id', None)
         try:
-            assert id_message is not None
-            current_message: Message = await ctx.fetch_message(int(id_message))
-        except AssertionError:
-            current_message: Message = [msg async for msg in ctx.channel.history(limit=1)].pop(0)
-        except NotFound:
-            await ctx.reply('Did not find the specified message', ephemeral=True, delete_after=10.0)
-            return
+            message = None
+            message_id = int(message_id)
+        except ValueError:
+            try:
+                message: Message = await anext(ctx.channel.history(limit=1, oldest_first=False))
+            except StopAsyncIteration:  ...
+        else:
+            try:
+                message: Message = await ctx.fetch_message(message_id)
+            except NotFound:  ...
+        finally:
+            if message is None:
+                return await ctx.reply(r'Did not find the specified message. ¯\_(ツ)_/¯', delete_after=10.0)
 
-        # Add reaction to message
         try:
-            await current_message.add_reaction(emoji)
+            await message.add_reaction(emoji)
         except (NotFound, TypeError):
-            await ctx.send(r'Sorry, could not find the specified emoji. ¯\_(ツ)_/¯', ephemeral=True)
-            return
+            return await ctx.send(r'Sorry, I couldn\'t add emoji to the message. ¯\_(ツ)_/¯')
 
         if ctx.interaction:
-            await ctx.reply('Emoji successfully added', ephemeral=True)
+            await ctx.reply('Emoji successfully added, please click on it')
 
-        # Wait author click on reaction
         try:
             await self.bot.wait_for('reaction_add', timeout=30.0, check=check)
-        except asyncio.TimeoutError:
-            pass
-
-        # Remove my self reaction
-        await current_message.remove_reaction(emoji, self.bot.user)
+        except asyncio.TimeoutError:  ...
+        finally:
+            await message.remove_reaction(emoji, self.bot.user)
 
 
 async def setup(bot: Bot) -> None:
-    await bot.add_cog(EmojiCogs(bot))
+    await bot.add_cog(Emoji(bot))

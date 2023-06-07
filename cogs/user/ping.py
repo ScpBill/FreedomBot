@@ -3,16 +3,15 @@ from discord.ext import commands
 
 
 # todo: PingPongCog
-class PingPongCog(Cog, name='Ping Pong'):
+class PingPong(Cog):
 
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    @commands.hybrid_command()
+    @commands.hybrid_command(description='Simple command that responds with Pong!')
     async def ping(self, ctx: Context) -> None:
-        """Simple command that responds with Pong!"""
-        await ctx.send('Pong!')
+        await ctx.send(f'Pong! Bot ping is {ctx.bot.latency}')
 
 
 async def setup(bot: Bot) -> None:
-    await bot.add_cog(PingPongCog(bot))
+    await bot.add_cog(PingPong(bot))

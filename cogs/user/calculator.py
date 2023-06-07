@@ -1,21 +1,23 @@
 from discord.ext.commands import Cog, Bot, Context
 from discord import Embed
 from discord.ext import commands
+from discord import app_commands
 
 import sympy
 import sys
 
 
 # todo: CalculatorCog
-class CalculatorCog(Cog, name='Calculator'):
+class Calculator(Cog):
 
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    @commands.hybrid_command(aliases=('calc', 'math'))
-    async def calculator(self, ctx: Context, *,
-                         expression: str = commands.parameter(description='String with the expression')):
-        """Calculating a mathematical expression"""
+    @commands.hybrid_command(aliases=('calc', 'math'), description='Calculating a mathematical expression')
+    @app_commands.describe(expression='String with the expression')
+    async def calculator(
+            self, ctx: Context, *,
+            expression: str = commands.parameter(description='String with the expression')) -> None:
 
         # Wait message
         await ctx.defer()
@@ -71,4 +73,4 @@ class CalculatorCog(Cog, name='Calculator'):
 
 
 async def setup(bot: Bot) -> None:
-    await bot.add_cog(CalculatorCog(bot))
+    await bot.add_cog(Calculator(bot))
