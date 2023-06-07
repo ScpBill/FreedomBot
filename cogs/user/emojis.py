@@ -44,7 +44,7 @@ class Emoji(Cog):
     async def emoji(self, ctx: Context) -> None:
         pass
 
-    @emoji.command(aliases=('info'), description='Get info about used emojis')
+    @emoji.command(aliases=('info',), description='Get info about used emojis')
     @app_commands.describe(emoji=':emoji: or emoji_name or EMOJI_ID or https://emoji_url')
     async def get(
             self, ctx: Context,
