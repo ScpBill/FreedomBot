@@ -42,7 +42,7 @@ class Font(Cog):
     def __init__(self, bot: Bot):
         self.bot = bot
     
-    async def font_style_autocomplete(ctx: Context, current: str):
+    async def font_style_autocomplete(self, ctx: Context, current: str):
         return [style for style in STYLES if current.lower() in style.value]
 
     @commands.hybrid_command(description='The font generator: write and copy!')
