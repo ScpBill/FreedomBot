@@ -40,9 +40,13 @@ class Emoji(Cog):
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    @commands.hybrid_group(aliases=('emote', 'reaction'), description='Get info about used emojis')
+    @commands.hybrid_group(aliases=('emote', 'reaction'))
+    async def emoji(self, ctx: Context) -> None:
+        pass
+
+    @emoji.command(aliases=('info'), description='Get info about used emojis')
     @app_commands.describe(emoji=':emoji: or emoji_name or EMOJI_ID or https://emoji_url')
-    async def emoji(
+    async def get(
             self, ctx: Context,
             emoji: CustomEmojiConverter = commands.parameter(description=':emoji: or emoji_name or emoji_ID or emoji_url')) -> None:
         await ctx.defer()
