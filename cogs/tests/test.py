@@ -6,6 +6,7 @@ from discord import app_commands, Member, Embed, Colour
 from spec.config import Config
 
 import os
+import random
 
 
 class Test(Cog):
@@ -18,6 +19,14 @@ class Test(Cog):
         await ctx.send(f'{ctx.author.name=}'
                        f'\n{ctx.author.nick=}'
                        f'\n{ctx.author.display_name=}')
+    
+    @commands.hybrid_command()
+    @commands.cooldown(per=600.0)
+    async def tag(self, ctx: Context):
+        member = random.choice(ctx.guild.members)
+        if not ctx.interaction:
+            await ctx.message.delete()
+        await ctx.send(f'The {member.mention} is the best!')
 
 
 async def setup(bot: Bot) -> None:
