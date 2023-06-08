@@ -21,7 +21,6 @@ class Test(Cog):
                        f'\n{ctx.author.display_name=}')
     
     @commands.hybrid_command()
-    @commands.cooldown(rate=1, per=600.0)
     async def tag(self, ctx: Context):
         member = random.choice(ctx.guild.members)
         if not ctx.interaction:
